@@ -69,5 +69,9 @@ app.post('/reviews/:gameId', (req, res) => {
   const gameId = req.body.gameId;
   const email = req.body.email;
   const reviewToDelete = { gameId: gameId, email: email };
-  db.Review.deleteOne(reviewToDelete);
+  db.Review.deleteOne(reviewToDelete, err => {
+    if(err) {
+      res.send("Couldn't delete review");
+    }
+  });
 })
