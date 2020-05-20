@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -13,7 +14,7 @@ app.listen(PORT, () => {
 
 app.use(express.static('public'));
 app.use('/games/:gameId', express.static('public'));
-
+// ---------------Read route---------------------------------------- //
 app.get('/reviews/:gameId', (req, res) => {
   db.Review.find({ gameId: req.params.gameId }, (err, result) => {
     if (err) {
@@ -23,7 +24,7 @@ app.get('/reviews/:gameId', (req, res) => {
     }
   });
 });
-
+// -----------------Update route -----------------------------------//
 app.post('/reviews/:gameId', jsonParser, (req, res) => {
   db.Review.findById(req.body.id, (err, review) => {
     if (err) {
@@ -51,3 +52,22 @@ app.post('/reviews/:gameId', jsonParser, (req, res) => {
     }
   });
 });
+// ---------------------Create route -------------------------------------//
+app.post('/reviews/:gameId', (req, res) => {
+  const newReview = req.body;
+  db.Review.save(newReview, err => {
+    if (err) {
+      res.send('There was an error adding a review');
+    } else {
+      res.send('Review saved!');
+    }
+  });
+});
+
+// -----------------------Delete route -----------------------------------//
+app.post('/reviews/:gameId', (req, res) => {
+  const gameId = req.body.gameId;
+  const email = req.body.email;
+  const reviewToDelete = { gameId: gameId, email: email };
+  db.Review.deleteOne(reviewToDelete);
+})
