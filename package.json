@@ -33,6 +33,7 @@
     "core-js": "^3.6.5",
     "express": "^4.17.1",
     "faker": "^4.1.0",
+    "fs": "0.0.1-security",
     "javascript-time-ago": "^2.0.7",
     "mongoose": "^5.9.11",
     "path": "^0.12.7",
