@@ -7,7 +7,7 @@ USE review_list;
 CREATE TABLE reviews (
     id int PRIMARY KEY,
     gameID int,
-    review_date date,
+    review_date text,
     overall int,
     title text,
     review text,
