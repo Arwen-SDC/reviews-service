@@ -1,101 +1,40 @@
+/* eslint-disable linebreak-style */
 const faker = require('faker');
-const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
 
-mongoose.connect('mongodb://localhost/reviews', { useNewUrlParser: true, useUnifiedTopology: true });
+const writePath = path.join(__dirname, '/../data.csv');
+const writeUsers = fs.createWriteStream(writePath);
+writeUsers.write('id, ageBracket, appeal, buyforself, email, gameid, gameplay, gender, graphics, helpful, location, nickname, overall, ownershipbracket, purchaseonline, readreviews, recommend, recommendbgs, review, review_date, title, unhelpful\n', 'utf8');
 
-const db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log('Connection to database successful!');
-  const reviewSchema = new mongoose.Schema({
-    gameId: Number,
-    date: { type: Date, default: Date.now },
-    overall: Number,
-    title: String,
-    review: String,
-    recommend: Boolean,
-    nickname: String,
-    location: String,
-    email: String,
-    buyForSelf: Boolean,
-    ageBracket: Number,
-    gender: Number,
-    graphics: Number,
-    gameplay: Number,
-    appeal: Number,
-    ownershipBracket: Number,
-    purchaseOnline: Boolean,
-    readReviews: Boolean,
-    recommendBGS: Number,
-    meta: {
-      helpful: Number,
-      unhelpful: Number,
-    },
-  });
-
-  const Review = mongoose.model('Review', reviewSchema);
-
-  function seed(Schema, num) {
-    for (let i = 1; i <= num; i += 1) {
-      const numOfReviews = Math.ceil(Math.random() * 20);
-
-      for (let j = 0; j < numOfReviews; j += 1) {
-        const review = new Schema({
-          gameId: i,
-          date: faker.date.recent(90),
-          overall: Math.ceil(Math.random() * 5),
-          title: faker.fake('{{company.catchPhraseAdjective}} {{commerce.productAdjective}} {{company.bsNoun}}'),
-          review: faker.lorem.paragraph(),
-          recommend: faker.random.boolean(),
-          nickname: faker.internet.userName(),
-          location: faker.fake('{{address.city}}, {{address.state}}'),
-          email: faker.internet.email(),
-          buyForSelf: faker.random.boolean(),
-          ageBracket: Math.ceil(Math.random() * 8),
-          gender: Math.ceil(Math.random() * 4),
-          graphics: Math.ceil(Math.random() * 5),
-          gameplay: Math.ceil(Math.random() * 5),
-          appeal: Math.ceil(Math.random() * 5),
-          ownershipBracket: Math.ceil(Math.random() * 5),
-          purchaseOnline: faker.random.boolean(),
-          readReviews: faker.random.boolean(),
-          recommendBGS: Math.ceil(Math.random() * 10),
-          meta: {
-            helpful: Math.floor(Math.random() * 101),
-            unhelpful: Math.floor(Math.random() * 101),
-          },
-        });
-
-        review.save()
-          .then(() => {
-            if (i === num && j === numOfReviews - 1) {
-              console.log('Seeded!');
-              db.close();
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+function generator(writer, encoding, callback) {
+  let i = 10000000;
+  let id = 0;
+  function write() {
+    let ok = true;
+    do {
+      i -= 1;
+      id += 1;
+      const data = `${id}, ${Math.ceil(Math.random() * 8)}, ${Math.ceil(Math.random() * 5)}, ${faker.random.boolean()}, "${faker.internet.email()}", ${Math.floor(Math.random() * 1000000)}, ${Math.ceil(Math.random() * 5)}, ${Math.ceil(Math.random() * 4)}, ${Math.ceil(Math.random() * 5)}, ${Math.floor(Math.random() * 101)}, "${faker.address.city() + ' ' + faker.address.state()}", ${faker.internet.userName()}, ${Math.ceil(Math.random() * 5)}, ${Math.ceil(Math.random() * 5)}, ${faker.random.boolean()}, ${faker.random.boolean()}, ${faker.random.boolean()}, ${Math.ceil(Math.random() * 10)}, "${faker.lorem.paragraph()}", "${faker.date.recent(90).toString()}", "${faker.name.firstName() + ' ' + faker.name.lastName()}", ${Math.floor(Math.random() * 101)}\n`;
+      // const data = `${id}, ${Math.floor(Math.random() * 1000000)}, ${faker.date.recent(90)}, ${Math.floor(Math.random() * 5)}, "${faker.name.firstName() + ' ' + faker.name.lastName()}", "${faker.lorem.paragraph()}", ${faker.random.boolean()}, "${faker.internet.userName()}", "${faker.address.city() + ' ' + faker.address.state()}", "${faker.internet.email()}", ${faker.random.boolean()}, ${Math.ceil(Math.random() * 8)}, ${Math.ceil(Math.random() * 4)}, ${Math.ceil(Math.random() * 5)}, ${Math.ceil(Math.random() * 5)}, ${Math.ceil(Math.random() * 5)}, ${Math.ceil(Math.random() * 5)}, ${faker.random.boolean()}, ${faker.random.boolean()}, ${Math.ceil(Math.random() * 10)}, ${Math.floor(Math.random() * 101)}, ${Math.floor(Math.random() * 101)}\n`;
+      if (i === 0) {
+        writer.write(data, encoding, callback);
+      } else {
+        ok = writer.write(data, encoding);
       }
+    } while (i > 0 && ok);
+    if (i > 0) {
+      writer.once('drain', write);
     }
   }
-
-  mongoose.connection.db.listCollections({ name: 'reviews' })
-    .next((err, names) => {
-      if (err) {
-        console.log(err);
-      } else if (names) {
-        mongoose.connection.db.dropCollection('reviews', (error) => {
-          if (error) {
-            console.log(error);
-            return;
-          }
-          console.log('Collection "reviews" dropped!');
-          seed(Review, 100);
-        });
-      } else {
-        seed(Review, 100);
-      }
-    });
+  write();
+}
+generator(writeUsers, 'utf-8', () => {
+  writeUsers.end();
 });
+
+
+// var date= faker.date.recent(90).toDateString();
+// console.log(date);
+
+// console.log(date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate());
