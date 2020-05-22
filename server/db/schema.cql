@@ -5,7 +5,7 @@ CREATE KEYSPACE review_list WITH replication = {'class':'SimpleStrategy', 'repli
 USE review_list;
 
 CREATE TABLE reviews (
-    id UUID PRIMARY KEY,
+    id int PRIMARY KEY,
     gameID int,
     review_date date,
     overall int,

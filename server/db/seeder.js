@@ -1,20 +1,55 @@
+/* eslint-disable linebreak-style */
 const faker = require('faker');
+
 // const mongoose = require('mongoose');
 const cassandra = require('cassandra-driver');
+
 const client = new cassandra.Client({
   contactPoints: ['localhost'],
   localDataCenter: 'datacenter1',
   keyspace: 'review_list',
 
 });
-const query = 'SELECT * from reviews where gameid = 102345 ALLOW FILTERING';
-client.execute(query)
-  .then(res => {
-    console.log(res.rows);
-  })
-  .catch(err => {
-    console.log(err);
-  })
+// const query = 'SELECT * from reviews where gameid = 102345 ALLOW FILTERING';
+// client.execute(query)
+//   .then(res => {
+//     console.log(res.rows);
+//   })
+//   .catch(err => {
+//     console.log(err);
+//   });
+for (let i = 0; i <= 1; i += 1) {
+  let id = i;
+  const gameID = Math.floor(Math.random() * 1000);
+  let reviewDate = faker.date.recent(90);
+  let overall = Math.floor(Math.random() * 5);
+  let title = faker.name.firstName() + ' ' + faker.name.lastName();
+  console.log(title);
+  let review = faker.lorem.paragraph();
+  let recommend = faker.random.boolean();
+  let nickname = faker.internet.userName();
+  let location = faker.address.city() + ' ' + faker.address.state();
+  let email = faker.internet.email();
+  let buyForSelf = faker.random.boolean();
+  let ageBracket = Math.ceil(Math.random() * 8);
+  let gender = Math.ceil(Math.random() * 4);
+  let graphics = Math.ceil(Math.random() * 5);
+  let gameplay = Math.ceil(Math.random() * 5);
+  let appeal = Math.ceil(Math.random() * 5);
+  let ownershipBracket = Math.ceil(Math.random() * 5);
+  let purchaseOnline = faker.random.boolean();
+  let readReviews = faker.random.boolean();
+  let recommendBGS = Math.ceil(Math.random() * 10);
+  let helpful = Math.floor(Math.random() * 101);
+  let unhelpful = Math.floor(Math.random() * 101);
+  let queryStri = `INSERT INTO reviews (id, gameID, review_date, overall, title, review, recommend, nickname, location, email, buyForSelf, ageBracket, gender, graphics, gameplay, appeal, ownershipBracket, purchaseOnline, readReviews, recommendBGS, helpful, unhelpful) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+  const params = [id, gameID, reviewDate, overall, title, review, recommend, nickname, location, email, buyForSelf, ageBracket, gender, graphics, gameplay, appeal, ownershipBracket, purchaseOnline, readReviews, recommendBGS, helpful, unhelpful];
+  let queryStr = `INSERT INTO reviews (id, gameID, overall, title, review, recommend, nickname, location, email, buyForSelf, ageBracket, gender, graphics, gameplay, appeal, ownershipBracket, purchaseOnline, readReviews, recommendBGS, helpful, unhelpful) VALUES (${id},${gameID},${overall},${title},${review},${recommend},${nickname},${location},${email},${buyForSelf},${ageBracket},${gender},${graphics},${gameplay},${appeal},${ownershipBracket},${purchaseOnline},${readReviews},${recommendBGS},${helpful},${unhelpful})`;
+   client.execute(queryStri, params, {prepare: true}, err => {
+      if (err) console.log(err);
+   });
+}
+console.log("seeding finished");
 // mongoose.connect('mongodb://localhost/reviews', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // const db = mongoose.connection;
