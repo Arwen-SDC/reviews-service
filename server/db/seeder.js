@@ -8,7 +8,7 @@ const writeUsers = fs.createWriteStream(writePath);
 writeUsers.write('id, ageBracket, appeal, buyforself, email, gameid, gameplay, gender, graphics, helpful, location, nickname, overall, ownershipbracket, purchaseonline, readreviews, recommend, recommendbgs, review, review_date, title, unhelpful\n', 'utf8');
 
 function generator(writer, encoding, callback) {
-  let i = 10000000;
+  let i = 46000000;
   let id = 0;
   function write() {
     let ok = true;

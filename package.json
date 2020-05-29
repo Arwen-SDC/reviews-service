@@ -9,7 +9,7 @@
     "build-p": "webpack --config webpack.prod.js",
     "dev-start": "nodemon server/index.js --ignore 'client/' --ignore 'public/'",
     "start": "node server/index.js",
-    "seed": "node server/db/seeder.js",
+    "seed": "node --max-old-space-size=8192 server/db/seeder.js",
     "test": "jest --coverage --passWithNoTests --verbose"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "fs": "0.0.1-security",
     "javascript-time-ago": "^2.0.7",
     "mongoose": "^5.9.11",
+    "newrelic": "^6.8.0",
     "path": "^0.12.7",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
