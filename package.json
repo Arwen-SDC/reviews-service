@@ -10,7 +10,8 @@
     "dev-start": "nodemon server/index.js --ignore 'client/' --ignore 'public/'",
     "start": "nodemon server/index.js",
     "seed": "node --max-old-space-size=8192 server/db/seeder.js",
-    "test": "jest --coverage --passWithNoTests --verbose"
+    "test": "jest --coverage --passWithNoTests --verbose",
+    "stress": "artillery run artillery.yml"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "artillery": "^1.6.0",
     "body-parser": "^1.19.0",
     "cassandra-driver": "^4.5.2",
     "core-js": "^3.6.5",
