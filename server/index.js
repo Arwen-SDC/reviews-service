@@ -15,15 +15,54 @@ app.listen(PORT, () => {
 app.use(express.static('public'));
 app.use('/games/:gameId', express.static('public'));
 // ---------------Read route---------------------------------------- //
-app.get('/reviews/:gameId', (req, res) => {
-  db.Review.find({ gameId: req.params.gameId }, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(result);
+// app.get('/reviews/:gameId', (req, res) => {
+//   db.Review.find({ gameId: req.params.gameId }, (err, result) => {
+//     if (err) {
+//       res.status(500).send(err);
+//     } else {
+//       res.status(200).send(result);
+//     }
+//   });
+// });
+
+app.get('/reviews/:gameId', (req,res) => {
+  db.getGameReviews(req.params.gameId, (reviews) => {
+    const formattedData = [];
+    for (var i = 0; i < reviews.length; i ++) {
+      let review = reviews[i];
+      let newObj = {
+        _id: review.id,
+        gameId: review.gameid,
+        date: '2020-04-22T16:36:21.548+00:00',
+        meta: {
+          helpful: review.helpful,
+          unhelpful: review.unhelpful,
+        },
+        ageBracket: review.agebracket,
+        appeal: review.appeal,
+        buyForSelf: review.buyforself,
+        email: review.email,
+        gameplay: review.gameplay,
+        gender: review.gender,
+        graphics: review.graphics,
+        location: review.location,
+        nickname: review.nickname,
+        overall: review.overall,
+        ownershipBracket: review.ownershipbracket,
+        purchaseOnline: review.purchaseonline,
+        readReviews: review.readreviews,
+        recommend: review.recommend,
+        recommendBGS: review.recommendbgs,
+        review: review.review,
+        title: review.title,
+      };
+      formattedData.push(newObj);
     }
-  });
-});
+    res.status(200).send(formattedData);
+  }
+
+  )}
+);
 // -----------------Update route -----------------------------------//
 app.post('/reviews/:gameId', jsonParser, (req, res) => {
   db.Review.findById(req.body.id, (err, review) => {
@@ -52,26 +91,3 @@ app.post('/reviews/:gameId', jsonParser, (req, res) => {
     }
   });
 });
-// ---------------------Create route -------------------------------------//
-app.post('/reviews/:gameId', (req, res) => {
-  const newReview = req.body;
-  db.Review.save(newReview, err => {
-    if (err) {
-      res.send('There was an error adding a review');
-    } else {
-      res.send('Review saved!');
-    }
-  });
-});
-
-// -----------------------Delete route -----------------------------------//
-app.post('/reviews/:gameId', (req, res) => {
-  const gameId = req.body.gameId;
-  const email = req.body.email;
-  const reviewToDelete = { gameId: gameId, email: email };
-  db.Review.deleteOne(reviewToDelete, err => {
-    if(err) {
-      res.send("Couldn't delete review");
-    }
-  });
-})

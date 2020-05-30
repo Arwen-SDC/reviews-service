@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React from 'react';
 import styled from 'styled-components';
 
@@ -140,7 +141,10 @@ class App extends React.Component {
 
   fetchReviews(currentGame = this.state.currentGame) {
     fetch(`${this.REVIEWSBASE}${currentGame}`)
-      .then((response) => response.json())
+      .then((response) =>  { 
+        console.log(response.json());
+        // response.json();
+      })
       .then((data) => { this.digestReviews(currentGame, data); })
       .then(() => { this.applyFilter(); })
       .then(() => { this.checkFavorable(); })
