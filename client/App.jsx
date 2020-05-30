@@ -141,10 +141,7 @@ class App extends React.Component {
 
   fetchReviews(currentGame = this.state.currentGame) {
     fetch(`${this.REVIEWSBASE}${currentGame}`)
-      .then((response) =>  { 
-        console.log(response.json());
-        // response.json();
-      })
+      .then((response) => response.json())
       .then((data) => { this.digestReviews(currentGame, data); })
       .then(() => { this.applyFilter(); })
       .then(() => { this.checkFavorable(); })
