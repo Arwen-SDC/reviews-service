@@ -1,0 +1,23 @@
+version: '2'
+services:
+    ui:
+        image: ikheraj17/node-reviews:1.5
+        ports:
+          - '80:80'
+        expose:
+          - '80'
+        depends_on: 
+          - postgres
+        environment: 
+          - PORT=80
+        links:
+            - postgres
+    postgres:
+        image: postgres
+        ports:
+          - '5432:5432'
+        environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=student
+          - POSTGRES_DB=review_list
+        

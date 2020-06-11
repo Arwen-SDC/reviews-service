@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const db = require('./db/index.js');
 
 const app = express();
-const PORT = 3002;
+const PORT = 3000;
 const jsonParser = bodyParser.json();
 
 app.listen(PORT, () => {
