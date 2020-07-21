@@ -61,32 +61,3 @@ app.post('/addGame/:gameid', (req, res) => {
   const newGame = { 'Batman: Arkham Asylum': 'All completed' };
   res.send(newGame);
 })
-
-// -----------------Update route -----------------------------------//
-// app.post('/reviews/:gameId', jsonParser, (req, res) => {
-//   db.Review.findById(req.body.id, (err, review) => {
-//     if (err) {
-//       res.status(500).send(err);
-//     } else if (req.body.voteString === 'yes') {
-//       review.meta.helpful += 1;
-//       review.save((error) => {
-//         if (err) {
-//           res.status(500).send(error);
-//         } else {
-//           res.status(202).send();
-//         }
-//       });
-//     } else if (req.body.voteString === 'no') {
-//       review.meta.unhelpful += 1;
-//       review.save((error) => {
-//         if (err) {
-//           res.status(500).send(error);
-//         } else {
-//           res.status(202).send();
-//         }
-//       });
-//     } else {
-//       res.status(400).send(`"Bad Vote String: ${req.body.voteString}"`);
-//     }
-//   });
-// });
