@@ -23,17 +23,11 @@
 
 ## Development
 
-## CRUD capabilities
+## Backend capabilities
 
-Create API route adds a new review passed from a front end post request by taking the body of the request and inserting it into the database.
+Read API route looks the review that matches the passed in gameID (numbers 1-10000000) and returns all reviews for that game.
 
-Read API route looks the review that matches the passed in gameID (numbers 1-100) and returns all reviews for that game.
-
-Update API finds the specific ID of a review, uses voteString to determine whether someone on the front end has clicked "helpful" or "unhelpful", adds 1 to the respective helpful/unhelpful category, and then saves the updated review to the database.
-
-Delete API route selects a review that matches a gameID and reviewID, and deletes it from the database.
-
-
+POST route created for stess testing purposes
 
 ### Installing Dependencies
 
